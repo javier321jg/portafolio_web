@@ -2,21 +2,27 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.core.mail import send_mail
-from .models import Project, Skill
+from django.views.decorators.http import require_http_methods
+from .models import Project, Skill, Achievement, Logo
 from .forms import ContactForm
 
 
 def home(request):
-    """Vista de la página principal con proyectos destacados"""
-    featured_projects = Project.objects.filter(is_featured=True)[:6]
+    """Vista de la página principal con proyectos destacados, logros y tecnologías"""
+    featured_projects = Project.objects.filter(is_featured=True).order_by('order')[:6]
+    featured_achievements = Achievement.objects.filter(is_featured=True).order_by('order')[:3]
+    technology_logos = Logo.objects.filter(logo_type='technology').order_by('order')
+
     context = {
         'featured_projects': featured_projects,
+        'featured_achievements': featured_achievements,
+        'technology_logos': technology_logos,
     }
     return render(request, 'portfolio/home.html', context)
 
 
 def project_list(request):
-    """Vista de listado de todos los proyectos con filtros"""
+    """Vista de listado de todos los proyectos con filtros y paginación"""
     projects = Project.objects.all()
 
     # Filtrar por categoría si se especifica
@@ -41,9 +47,13 @@ def project_list(request):
 
 
 def project_detail(request, slug):
-    """Vista de detalle de un proyecto"""
+    """Vista de detalle de un proyecto con galería"""
     project = get_object_or_404(Project, slug=slug)
     gallery_images = project.images.all()
+
+    # Incrementar contador de vistas
+    project.views_count += 1
+    project.save(update_fields=['views_count'])
 
     context = {
         'project': project,
@@ -53,8 +63,10 @@ def project_detail(request, slug):
 
 
 def about(request):
-    """Vista de la página Acerca de mí"""
-    skills = Skill.objects.all()
+    """Vista de la página Acerca de mí con skills, logros y empresas"""
+    skills = Skill.objects.all().order_by('order', 'category')
+    achievements = Achievement.objects.all().order_by('-date_achieved')
+    company_logos = Logo.objects.filter(logo_type='company').order_by('order')
 
     # Organizar skills por categoría
     skills_by_category = {}
@@ -66,10 +78,13 @@ def about(request):
 
     context = {
         'skills_by_category': skills_by_category,
+        'achievements': achievements,
+        'company_logos': company_logos,
     }
     return render(request, 'portfolio/about.html', context)
 
 
+@require_http_methods(["GET", "POST"])
 def contact(request):
     """Vista del formulario de contacto"""
     if request.method == 'POST':

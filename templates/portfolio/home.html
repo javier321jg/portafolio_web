@@ -87,6 +87,77 @@
         </div>
     </div>
 </section>
+
+<!-- Featured Achievements Section -->
+{% if featured_achievements %}
+<section class="py-20 bg-gradient-to-b from-transparent to-black/20">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text fade-in">
+            Logros Destacados
+        </h2>
+        <p class="text-center text-gray-400 mb-12 fade-in">
+            Certificaciones, premios y reconocimientos profesionales
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for achievement in featured_achievements %}
+            <div class="glass rounded-xl p-6 hover-glow achievement-card opacity-0 flex flex-col">
+                {% if achievement.badge_image %}
+                <div class="mb-4 flex justify-center">
+                    <img src="{{ achievement.badge_image.url }}" alt="{{ achievement.title }}"
+                         class="w-24 h-24 object-contain rounded-lg">
+                </div>
+                {% endif %}
+                <h3 class="text-xl font-bold mb-2 text-center">{{ achievement.title }}</h3>
+                <p class="text-electric-blue text-sm mb-2 text-center font-semibold">{{ achievement.organization }}</p>
+                {% if achievement.position %}
+                <p class="text-neon-green text-sm mb-4 text-center">{{ achievement.position }}</p>
+                {% endif %}
+                <p class="text-gray-400 text-sm text-center flex-grow">{{ achievement.date_achieved|date:"M Y" }}</p>
+                {% if achievement.url %}
+                <a href="{{ achievement.url }}" target="_blank" class="mt-4 text-center text-electric-blue hover:text-neon-green transition-colors">
+                    Verificar →
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Technologies Section -->
+{% if technology_logos %}
+<section class="py-20">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text fade-in">
+            Tecnologías y Herramientas
+        </h2>
+
+        <div class="swiper tech-slider">
+            <div class="swiper-wrapper">
+                {% for logo in technology_logos %}
+                <div class="swiper-slide">
+                    <div class="glass rounded-xl p-8 hover-glow h-full flex items-center justify-center group">
+                        {% if logo.logo_svg %}
+                            <div class="w-16 h-16 flex items-center justify-center">
+                                {{ logo.logo_svg|safe }}
+                            </div>
+                        {% elif logo.logo_image %}
+                            <img src="{{ logo.logo_image.url }}" alt="{{ logo.name }}"
+                                 class="w-24 h-24 object-contain group-hover:scale-110 transition-transform">
+                        {% endif %}
+                        <p class="text-sm text-gray-400 text-center mt-2">{{ logo.name }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% endblock %}
 
 {% block extra_js %}
@@ -199,6 +270,20 @@
         });
     });
 
+    // Animate achievement cards
+    gsap.utils.toArray('.achievement-card').forEach((card, index) => {
+        gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: index * 0.15,
+            scrollTrigger: {
+                trigger: card,
+                start: 'top 85%',
+            }
+        });
+    });
+
     // Animate fade-in elements
     gsap.utils.toArray('.fade-in').forEach((el) => {
         gsap.from(el, {
@@ -210,6 +295,31 @@
                 start: 'top 80%',
             }
         });
+    });
+
+    // Initialize Swiper for technologies
+    const techSwiper = new Swiper('.tech-slider', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            1024: {
+                slidesPerView: 5,
+                spaceBetween: 20,
+            }
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        loop: true,
     });
 
     // Smooth scroll for anchor links
