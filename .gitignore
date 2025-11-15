@@ -1,0 +1,45 @@
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+/staticfiles/
+/media/*
+!/media/.gitkeep
+!/media/projects/
+/media/projects/*
+!/media/projects/.gitkeep
+!/media/projects/covers/
+!/media/projects/gallery/
+/media/projects/covers/*
+/media/projects/gallery/*
+!/media/projects/covers/.gitkeep
+!/media/projects/gallery/.gitkeep
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak

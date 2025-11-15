@@ -1,0 +1,120 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}Proyectos - Nelson Javier Gutierrez Ramos{% endblock %}
+
+{% block content %}
+<section class="py-20 min-h-screen">
+    <div class="container mx-auto px-6">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 gradient-text fade-in">
+                Mis Proyectos
+            </h1>
+            <p class="text-gray-400 text-lg fade-in">
+                Explora mi trabajo en diferentes áreas
+            </p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex flex-wrap justify-center gap-4 mb-12 fade-in">
+            <a href="{% url 'project_list' %}"
+               class="px-6 py-3 rounded-lg transition-all duration-300 {% if not current_category %}bg-blue-600 hover:bg-blue-700{% else %}glass hover-glow{% endif %}">
+                Todos
+            </a>
+            {% for category_code, category_name in categories %}
+            <a href="?categoria={{ category_code }}"
+               class="px-6 py-3 rounded-lg transition-all duration-300 {% if current_category == category_code %}bg-blue-600 hover:bg-blue-700{% else %}glass hover-glow{% endif %}">
+                {{ category_name }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Projects Grid -->
+        {% if page_obj %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {% for project in page_obj %}
+            <div class="glass rounded-xl overflow-hidden hover-glow project-card opacity-0">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="{{ project.cover_image.url }}" alt="{{ project.title }}"
+                         class="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110">
+                    <div class="absolute top-4 right-4">
+                        <span class="px-3 py-1 bg-blue-600 rounded-full text-sm">
+                            {{ project.get_category_display }}
+                        </span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold mb-2">{{ project.title }}</h3>
+                    <p class="text-gray-400 mb-4 line-clamp-2">{{ project.short_description }}</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        {% for tech in project.technologies.split:', ' %}
+                        <span class="px-2 py-1 bg-gray-700 rounded text-sm">{{ tech|slice:":15" }}{% if tech|length > 15 %}...{% endif %}</span>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'project_detail' project.slug %}"
+                       class="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                        Ver detalles
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-20">
+            <div class="glass rounded-xl p-12 max-w-md mx-auto">
+                <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="text-gray-400 text-lg">No hay proyectos en esta categoría.</p>
+                <p class="text-gray-500 mt-2">Prueba con otra categoría o agrega proyectos desde el panel de administración.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="flex justify-center items-center space-x-4">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_category %}&categoria={{ current_category }}{% endif %}"
+               class="px-6 py-3 glass hover-glow rounded-lg transition-all">
+                Anterior
+            </a>
+            {% endif %}
+
+            <span class="text-gray-400">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_category %}&categoria={{ current_category }}{% endif %}"
+               class="px-6 py-3 glass hover-glow rounded-lg transition-all">
+                Siguiente
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // GSAP Animations
+    gsap.utils.toArray('.fade-in').forEach((el) => {
+        gsap.from(el, {
+            opacity: 0,
+            y: 30,
+            duration: 1,
+        });
+    });
+
+    gsap.utils.toArray('.project-card').forEach((card, index) => {
+        gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: index * 0.1,
+        });
+    });
+</script>
+{% endblock %}
