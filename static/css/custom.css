@@ -1,5 +1,6 @@
 /* ================================
    Custom Styles - Portafolio Nelson
+   Diseño Premium Tipo Alche.studio
    ================================ */
 
 /* Root Variables */
@@ -25,6 +26,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* ================================
@@ -32,20 +34,9 @@ body {
    ================================ */
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
+    font-weight: 900;
     line-height: 1.2;
-}
-
-h1 {
-    font-size: 2.5rem;
-}
-
-h2 {
-    font-size: 2rem;
-}
-
-h3 {
-    font-size: 1.5rem;
+    letter-spacing: -0.01em;
 }
 
 p {
@@ -73,12 +64,8 @@ a:hover {
     padding: 0 1.5rem;
 }
 
-section {
-    padding: 4rem 0;
-}
-
 /* ================================
-   Glass Effect (Glassmorphism)
+   Glass Cards
    ================================ */
 
 .glass {
@@ -94,8 +81,32 @@ section {
     border-color: rgba(0, 212, 255, 0.2);
 }
 
+.glass-dark {
+    background: rgba(10, 10, 15, 0.5);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 20px;
+}
+
+.glass-card {
+    background: rgba(26, 26, 46, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+    background: rgba(26, 26, 46, 0.6);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+}
+
 /* ================================
-   Glow & Border Effects
+   Hover Effects
    ================================ */
 
 .hover-glow {
@@ -104,18 +115,22 @@ section {
 }
 
 .hover-glow:hover {
-    box-shadow:
-        0 0 30px rgba(0, 212, 255, 0.5),
-        inset 0 0 20px rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.1);
     border-color: rgba(0, 212, 255, 0.8);
     transform: translateY(-2px);
 }
 
+.hover-scale {
+    transition: var(--transition-smooth);
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
 .neon-border {
     border: 1px solid rgba(0, 212, 255, 0.5);
-    box-shadow:
-        inset 0 0 10px rgba(0, 212, 255, 0.1),
-        0 0 10px rgba(0, 212, 255, 0.2);
+    box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1), 0 0 10px rgba(0, 212, 255, 0.2);
 }
 
 /* ================================
@@ -132,12 +147,8 @@ section {
 }
 
 @keyframes gradient-shift {
-    0%, 100% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 /* ================================
@@ -290,7 +301,7 @@ button:hover {
 }
 
 /* ================================
-   Scrollbar Styling
+   Scrollbar
    ================================ */
 
 ::-webkit-scrollbar {
@@ -354,26 +365,10 @@ button:hover {
 }
 
 /* ================================
-   Responsive Design
+   Responsive
    ================================ */
 
 @media (max-width: 768px) {
-    h1 {
-        font-size: 1.875rem;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    h3 {
-        font-size: 1.25rem;
-    }
-
-    section {
-        padding: 2rem 0;
-    }
-
     .container {
         padding: 0 1rem;
     }
@@ -387,24 +382,6 @@ button:hover {
     h2 {
         font-size: 1.25rem;
     }
-
-    h3 {
-        font-size: 1rem;
-    }
-
-    section {
-        padding: 1.5rem 0;
-    }
-}
-
-/* ================================
-   Dark Mode Support
-   ================================ */
-
-@media (prefers-color-scheme: dark) {
-    body {
-        color-scheme: dark;
-    }
 }
 
 /* ================================
@@ -416,27 +393,5 @@ button:hover {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-    }
-}
-
-/* ================================
-   Print Styles
-   ================================ */
-
-@media print {
-    body {
-        background: white;
-        color: black;
-    }
-
-    .glass {
-        background: white;
-        border: 1px solid #ccc;
-    }
-
-    .gradient-text,
-    .text-gradient {
-        -webkit-text-fill-color: black;
-        color: black;
     }
 }
